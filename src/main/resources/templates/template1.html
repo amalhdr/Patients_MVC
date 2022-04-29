@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -31,26 +33,27 @@
                     Liste Patients
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" th:href="@{/formPatients}">Nouveau Patient</a></li>
+                    <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" th:href="@{/formPatients}">Nouveau Patient</a></li>
                     <li><a class="dropdown-item" th:href="@{index}">Chercher Paient</a></li>
 
 
                 </ul>
             </li>
         </ul>
-        <ul class="navbar-nav">
+        <!--ce ul ne va afficher que l'orsqu'on n 'est connectté -->
+        <ul class="navbar-nav"   sec:authorize="isAuthenticated()">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                    [Username]
+                    <span sec:authentication="name"></span>
                 </a>
+
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" th:href="@{/formPatients}">Logout</a></li>
-
-
-
-                </ul>
+                    <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+               </ul>
             </li>
-
+            <li class="nav-item">
+                <a class="nav-link" sec:authorize="!isAuthenticated()" th:href="@{/login}">Login</a>
+            </li>
 
         </ul>
 

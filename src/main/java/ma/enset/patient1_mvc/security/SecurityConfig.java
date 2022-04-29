@@ -15,7 +15,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-      //les users qui vont etre creer il vont etre stocker en memoire
+      //les users qui v ont etre creer il vont etre stocker en memoire
         PasswordEncoder passwordEncoder = passwordEncoder();
         String encodedPWD = passwordEncoder.encode("1234");
         System.out.println(encodedPWD);
@@ -29,7 +29,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     @Override
     protected void configure(HttpSecurity http) throws Exception {
        http.formLogin();
+       http.authorizeRequests().antMatchers("/").permitAll();
+       http.authorizeRequests().antMatchers("/delete/**","/edit/**","/save/**","/formPatients/**").hasRole("ADMIN");
+       http.authorizeRequests().antMatchers("/index/**").hasRole("USER");
        http.authorizeRequests().anyRequest().authenticated();
+       http.exceptionHandling().accessDeniedPage("/403");
     }
     @Bean
     PasswordEncoder passwordEncoder()

@@ -54,14 +54,10 @@ public class PatientController {
     @GetMapping("/")
     public String home()
     {
-      return "redirect:/index";
+      return "home";
     }
 
-    @GetMapping("/ff")
-    public String ff()
-    {
-        return "patients";
-    }
+
     @GetMapping("/patients")
     //la liste patient au format json
     @ResponseBody
