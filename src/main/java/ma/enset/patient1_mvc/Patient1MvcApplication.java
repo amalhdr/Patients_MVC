@@ -2,6 +2,7 @@ package ma.enset.patient1_mvc;
 
 import ma.enset.patient1_mvc.entities.Patient;
 import ma.enset.patient1_mvc.repositories.PatientRepository;
+import ma.enset.patient1_mvc.security.service.SecurityService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -32,6 +33,21 @@ public class Patient1MvcApplication {
 
 
         };
+    }
+
+    @Bean
+    CommandLineRunner saveUsers(SecurityService securityService)
+    { return  args -> {
+        securityService.saveNewUser("abdo","1234","1234");
+        securityService.saveNewUser("anas","1234","1234");
+        securityService.saveNewRole("USER","");
+        securityService.saveNewRole("ADMIN","");
+
+        securityService.addRoleToUser("abdo","ADMIN");
+        securityService.addRoleToUser("abdo","USER");
+        securityService.addRoleToUser("anas","USER");
+    };
+
     }
 
 }
