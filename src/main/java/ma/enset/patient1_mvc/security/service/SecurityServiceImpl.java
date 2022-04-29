@@ -8,8 +8,9 @@ import ma.enset.patient1_mvc.security.repositories.AppRoleRepository;
 import ma.enset.patient1_mvc.security.repositories.AppUserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+
 import java.util.UUID;
 
 @Service
@@ -41,7 +42,7 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public AppRole saveNewRole(String roleName, String description) {
-        AppRole appRole = appRoleRepository.findByRolename(roleName);
+        AppRole appRole = appRoleRepository.findByRoleName(roleName);
         if (appRole != null) throw new RuntimeException("Role " + roleName + "already exist");
         appRole = new AppRole();
         appRole.setRoleName(roleName);
@@ -54,7 +55,8 @@ public class SecurityServiceImpl implements SecurityService {
     public void addRoleToUser(String username, String roleName) {
         AppUser appUser = appUserRepository.findByUsername(username);
         if (appUser == null) throw new RuntimeException("User not found");
-        AppRole appRole = appRoleRepository.findByRolename(roleName);
+        AppRole appRole = appRoleRepository.findByRoleName(roleName);
+        if (appRole == null) throw new RuntimeException("Role not found");
         appUser.getAppRoles().add(appRole);
     }
 
@@ -62,12 +64,14 @@ public class SecurityServiceImpl implements SecurityService {
     public void removeRoleFromUser(String username, String roleName) {
         AppUser appUser = appUserRepository.findByUsername(username);
         if (appUser == null) throw new RuntimeException("User not found");
-        AppRole appRole = appRoleRepository.findByRolename(roleName);
+        AppRole appRole = appRoleRepository.findByRoleName(roleName);
+        if (appRole == null) throw new RuntimeException("Role not found");
         appUser.getAppRoles().remove(appRole);
     }
 
     @Override
     public AppUser loadUserByUserName(String username) {
-        return null;
+
+        return appUserRepository.findByUsername(username);
     }
 }
