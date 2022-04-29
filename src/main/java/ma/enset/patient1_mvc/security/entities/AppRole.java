@@ -1,4 +1,4 @@
-package ma.enset.patient1_mvc.security;
+package ma.enset.patient1_mvc.security.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
