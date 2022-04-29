@@ -7,6 +7,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -31,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         auth.inMemoryAuthentication().withUser("admin").password(passwordEncoder.encode("2345")).roles("USER","ADMIN");
 
 */
-
+/*
         //etablic une connexion vers une base de donnée
          auth.jdbcAuthentication()
         .dataSource(dataSource)
@@ -39,6 +42,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         .authoritiesByUsernameQuery("select username as principal , role as role from users_roles where username=?")
         .rolePrefix("ROLE_")
         .passwordEncoder(passwordEncoder);
+        */
+        auth.userDetailsService(new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+                return null;
+            }
+        });
      }
 //presisier les droits d'acces
     @Override
@@ -47,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
        http.authorizeRequests().antMatchers("/").permitAll();
        http.authorizeRequests().antMatchers("/admin/**").hasRole("ADMIN");
        http.authorizeRequests().antMatchers("/user/**").hasRole("USER");
+       http.authorizeRequests().antMatchers("/webjars/**").permitAll();
 
        http.authorizeRequests().anyRequest().authenticated();
        http.exceptionHandling().accessDeniedPage("/403");
